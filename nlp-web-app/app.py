@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -10,8 +10,13 @@ def index():
 def register():
     return render_template("register.html")
 
-@app.route("/perform_registration")
+@app.route("/perform_registration", methods=["POST"])
 def perform_registration():
-    return "Something"
+    name = request.form.get("user_ka_name")
+    email = request.form.get("user_ka_email")
+    password = request.form.get("user_ka_password")
+    return f"{name} {email} {password}"
+
+
 
 app.run(debug = True)
