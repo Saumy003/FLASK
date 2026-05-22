@@ -41,7 +41,20 @@ def perform_login():
 
 @app.route("/profile")
 def profile():
-    return "Profile"
+    return render_template("profile.html")
+
+
+@app.route("/ner")
+def ner():
+    return render_template("ner.html")
+
+
+@app.route("/perform_ner", method=["POST"] )
+def perform_ner():
+    text = request.form.get("ner_text")
+    response = api.ner(text)
+    print(response)
+    return "something"
 
 
 app.run(debug = True)
