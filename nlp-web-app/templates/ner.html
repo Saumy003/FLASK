@@ -12,5 +12,14 @@
         <textarea name="ner_text" id=""></textarea>
         <input type="submit" value="Perform NER">
     </form>
+
+
+    {%if result %}
+           {% for i in response["entities"]: %}
+        <p>{{ i["name"] + "==>" + i["catogry"]}}</p>
+        {% endfor %}
+    {% endif %}
+
+
 </body>
 </html>

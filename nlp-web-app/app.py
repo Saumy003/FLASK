@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from db import Database
 
 app = Flask(__name__)
-
 dbo = Database()
 
 @app.route("/")
 def index():
+    session["logged_in"] = 0
     return render_template("login.html")
 
 @app.route("/register")
@@ -35,26 +35,33 @@ def perform_login():
     response = dbo.search(email, password)
 
     if response:
+        session["logged_in"] = 1
         return redirect("/profile")
     else:
         return render_template("login.html", message="Incorrect email/password")
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
-
+        return render_template("profile.html")
 
 @app.route("/ner")
 def ner():
-    return render_template("ner.html")
+    if session:
+        return render_template("ner.html")
+    else:
+        return redirect("/")
 
 
 @app.route("/perform_ner", method=["POST"] )
 def perform_ner():
-    text = request.form.get("ner_text")
-    response = api.ner(text)
-    print(response)
-    return "something"
+    if session:
+        text = request.form.get("ner_text")
+        response = api.ner(text)
+        print(response)
 
+        return render_template("ner.html", response=response)
+
+    else:
+        return redirect("/")
 
 app.run(debug = True)
