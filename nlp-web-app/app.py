@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, session
 from db import Database
+import api
 
 app = Flask(__name__)
+app.secret_key = "mysecretkey"
 dbo = Database()
 
 @app.route("/")
@@ -52,7 +54,7 @@ def ner():
         return redirect("/")
 
 
-@app.route("/perform_ner", method=["POST"] )
+@app.route("/perform_ner", methods=["POST"] )
 def perform_ner():
     if session:
         text = request.form.get("ner_text")
